@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/signup_layout"
+    android:background="@android:color/white"
+
+    tools:context=".MainActivity">
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+
+
+
+        android:gravity="center"
+        android:layout_height="300dp">
+
+        <ImageView
+
+            android:id="@+id/app_name"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:scaleType="centerInside"
+
+
+            android:gravity="center"
+            android:src="@drawable/logo"
+            >
+
+        </ImageView>
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/snpFull_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+
+                android:hint="Full Name"
+                android:background="@drawable/text_fields_style"
+                android:textSize="13sp"
+
+
+                android:padding="10dip"
+                android:singleLine="true" />
+
+
+
+
+            <EditText
+                android:id="@+id/snpEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+
+                android:hint="Email"
+                android:background="@drawable/text_fields_style"
+                android:textSize="13sp"
+
+
+                android:padding="10dip"
+                android:singleLine="true" />
+
+
+
+            <EditText
+                android:id="@+id/snppassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/text_fields_style"
+
+                android:hint="Password"
+
+                android:textSize="13sp"
+
+
+                android:padding="10dip"
+                android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/snpconfirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/text_fields_style"
+
+            android:hint="Confirm Password"
+
+            android:textSize="13sp"
+
+
+            android:padding="10dip"
+            android:singleLine="true" />
+
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/input_layout_cnfphnno"
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:textColor="@color/com_facebook_button_background_color_focused"
+            android:background="@drawable/bluebutton_style"
+            android:text="Sign Up"/>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
