@@ -26,6 +26,15 @@ public class eventresponse {
 
     @SerializedName("msg")
     private String msg;
+
+    public event getData() {
+        return data;
+    }
+
+    public void setData(event data) {
+        this.data = data;
+    }
+
     @SerializedName("data")
     event data;
 

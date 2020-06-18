@@ -168,11 +168,11 @@ public class CreateEvent extends AppCompatActivity  {
         picker=(DatePicker)findViewById(R.id.datePicker1);
         create_event=(Button) findViewById(R.id.btnCreateEvent);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("shoutitout", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Authtoken", MODE_PRIVATE);
 
        token = sharedPreferences.getString("token", null);
 
-       Log.d("tokenPassed",token);
+       Log.d("tokenPassed:",token);
         create_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -426,19 +426,26 @@ public class CreateEvent extends AppCompatActivity  {
 
 
     void  callfuction(String Image_AWS_URL){
+
+        Log.d("Date",String_date);
         event ebody=new event(String_name, String_email, String_date,String_description,Image_AWS_URL,Integer.valueOf(String_people),Integer.valueOf(String_price));
       Call<eventresponse> call  =      mAPIServices.CreateEvent("application/json","application/json",token,ebody);
         call.enqueue(new Callback<eventresponse>() {
             @Override
             public void onResponse(Call<eventresponse> call, Response<eventresponse> response) {
 if(response.isSuccessful()){
-    Log.d("Response",response.body().getMsg());
-    Toast.makeText(getApplicationContext(),"Successfull Created",Toast.LENGTH_SHORT).show();
+    Log.d("Response",response.body().getData().getFullname());
+    Log.d("Response",response.body().getData().getEventdate() );
+    Log.d("response:Des",response.body().getData().getDescription() + response.body().getData().getUserId() + response.body().getData().getEventbanner() );
+    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
+
     dailog.dismiss();
 
 }else {
-  //  Log.d("Response",response.body().getMsg());
-    Toast.makeText(getApplicationContext(),"not Created",Toast.LENGTH_SHORT).show();
+   Log.d("Response",response.body().getMsg());
+    Log.d("Response",response.body().getData().getEventdate() );
+    Log.d("response:Des",response.body().getData().getEventdate());
+    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
     dailog.dismiss();
 
 
@@ -474,7 +481,7 @@ if(response.isSuccessful()){
              "ap-south-1:28937b7b-fce2-4df2-a041-4c6a81afd420", // Identity pool ID
              Regions.AP_SOUTH_1 // Region
      );
-
+//
 
  }
 

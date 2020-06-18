@@ -61,5 +61,75 @@ public class event {
     }
 
 
+    public String getFullname() {
+        return fullname;
+    }
 
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEventdate() {
+        return eventdate;
+    }
+
+    public void setEventdate(String eventdate) {
+        this.eventdate = eventdate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getEventbanner() {
+        return eventbanner;
+    }
+
+    public void setEventbanner(String eventbanner) {
+        this.eventbanner = eventbanner;
+    }
+
+    public Integer getNoofpeople() {
+        return noofpeople;
+    }
+
+    public void setNoofpeople(Integer noofpeople) {
+        this.noofpeople = noofpeople;
+    }
+
+    public Integer getTicketprice() {
+        return ticketprice;
+    }
+
+    public void setTicketprice(Integer ticketprice) {
+        this.ticketprice = ticketprice;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

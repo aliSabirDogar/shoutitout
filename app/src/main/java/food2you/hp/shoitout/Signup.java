@@ -73,7 +73,7 @@ public class Signup extends Activity {
         textInputEditTextEmail = (EditText) findViewById(R.id.snpEmail);
         textInputEditTextPassword = (EditText) findViewById(R.id.snppassword);
         textInputEditTextConfirmPassword = (EditText) findViewById(R.id.snpconfirm_password);
-    sharedPreferences = getSharedPreferences("shoutitout", MODE_PRIVATE);
+    sharedPreferences = getSharedPreferences("Authtoken", MODE_PRIVATE);
 
         Register = (Button) findViewById(R.id.btnSignUp);
         Register.setOnClickListener(new View.OnClickListener() {

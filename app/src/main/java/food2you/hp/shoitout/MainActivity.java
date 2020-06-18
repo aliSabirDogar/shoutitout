@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +18,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
 import food2you.hp.shoitout.adapters.HomeScreenHorizontalListAdapter;
 import food2you.hp.shoitout.adapters.HomeScreenVerticalListAdapter;
 import food2you.hp.shoitout.adapters.UpComingEventsAdapter;
@@ -48,7 +51,7 @@ public class MainActivity extends Activity{
     private RecyclerView.Adapter AdapterForUpcomingEvents;
     private  APIService apiInterface;
 
-
+    SpotsDialog dailog ;
     TextView create_event;
 
     String token;
@@ -64,10 +67,24 @@ public class MainActivity extends Activity{
         setContentView(R.layout.activity_main);
         create_event=findViewById(R.id.create_event);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("shoutitout", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Authtoken", MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
         Log.d("tokenPassed",token);
 
+
+
+        dailog = (SpotsDialog) new SpotsDialog.Builder()
+                .setContext(this)
+                .build();
+
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUpComingEventListFromServer();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
         apiInterface = RetrofitClient.getApiClient().create(APIService.class);
 
@@ -132,7 +149,7 @@ public class MainActivity extends Activity{
 
     void  getUpComingEventListFromServer(){
 
-
+        dailog.show();
 
 
 
@@ -155,13 +172,16 @@ public class MainActivity extends Activity{
                 if(response.isSuccessful()){
 
 
+                    Log.d("Response:",response.body().getMsg());
+                    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
                    AdapterForUpcomingEvents = new UpComingEventsAdapter(response.body().getData(),getApplicationContext());
                     recyclerView_VERTICAL.setAdapter(AdapterForUpcomingEvents);
-
+                    dailog.dismiss();
                 }else {
 
                     Log.d("Response:",response.body().getMsg());
-
+                    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
+                    dailog.dismiss();
                 }
 
 
