@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
+import food2you.hp.shoitout.ListListenerInterface.CustomItemClickListener;
 import food2you.hp.shoitout.adapters.HomeScreenHorizontalListAdapter;
 import food2you.hp.shoitout.adapters.HomeScreenVerticalListAdapter;
 import food2you.hp.shoitout.adapters.UpComingEventsAdapter;
@@ -53,13 +56,44 @@ public class MainActivity extends Activity{
 
     SpotsDialog dailog ;
     TextView create_event;
+    private List<eventbody> EventsList;
 
     String token;
 
 
+    public static String  person_name,party,ticket,no_people,date,desc,banner,email,id;
 
 
 
+
+
+
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //TODO: Step 4 of 4: Finally call getTag() on the view.
+            // This viewHolder will have all required values.
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
+            person_name=EventsList.get(position).getFullName();
+            party=EventsList.get(position).getFullName();
+            ticket=String.valueOf(EventsList.get(position).getTicketPrice());
+            no_people=String.valueOf(EventsList.get(position).getNoOfPeople());
+            date=EventsList.get(position).getEventDate();
+            desc=EventsList.get(position).getDescription();
+            banner=EventsList.get(position).getEventBanner();
+            email=EventsList.get(position).getEmail();
+            id=EventsList.get(position).getId().toString();
+            Toast.makeText(getApplicationContext(),EventsList.get(position).getFullName(),Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, DetailEvent.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            MainActivity.this.startActivity(intent);
+            // viewHolder.getItemId();
+            // viewHolder.getItemViewType();
+            // viewHolder.itemView;
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +111,14 @@ public class MainActivity extends Activity{
                 .setContext(this)
                 .build();
 
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+       /* final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getUpComingEventListFromServer();
                 pullToRefresh.setRefreshing(false);
             }
-        });
+        });*/
 
         apiInterface = RetrofitClient.getApiClient().create(APIService.class);
 
@@ -143,7 +177,9 @@ public class MainActivity extends Activity{
 
             }
         });
-    }// end  of OnCreate Method.
+    }
+
+    // end  of OnCreate Method.
 
 
 
@@ -174,13 +210,23 @@ public class MainActivity extends Activity{
 
                     Log.d("Response:",response.body().getMsg());
                     Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
-                   AdapterForUpcomingEvents = new UpComingEventsAdapter(response.body().getData(),getApplicationContext());
+                    EventsList = response.body().getData();
+                    HomeScreenVerticalListAdapter recyclerViewAdapter = new HomeScreenVerticalListAdapter(response.body().getData(),getApplicationContext());
+                   /*AdapterForUpcomingEvents = new HomeScreenVerticalListAdapter(response.body().getData(),getApplicationContext());
                     recyclerView_VERTICAL.setAdapter(AdapterForUpcomingEvents);
+                    AdapterForUpcomingEvents.setOnItemClickListener(onItemClickListener);*/
+
+                    //recyclerView_VERTICAL.setLayoutManager(new LinearLayoutManager(this));
+                    recyclerView_VERTICAL.setAdapter(recyclerViewAdapter);
+                    //TODO: Step 1 of 4: Create and set OnItemClickListener to the adapter.
+                    recyclerViewAdapter.setOnItemClickListener(onItemClickListener);
                     dailog.dismiss();
                 }else {
 
-                    Log.d("Response:",response.body().getMsg());
-                    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
+                    if(response.body()!=null) {
+                        Log.d("Response:", response.body().getMsg());
+                        Toast.makeText(getApplicationContext(), response.body().getMsg(), Toast.LENGTH_SHORT).show();
+                    }
                     dailog.dismiss();
                 }
 

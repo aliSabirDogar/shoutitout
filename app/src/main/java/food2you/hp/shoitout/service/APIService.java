@@ -9,11 +9,13 @@ import food2you.hp.shoitout.model.eventbody;
 import food2you.hp.shoitout.model.eventresponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface APIService {
@@ -23,6 +25,21 @@ public interface APIService {
                                  @Header("Content-Type") String content,
                                  @Header("Authorization") String token,
                                  @Body event body);
+
+    @PUT("events/update_event")
+    Call<eventresponse> UpdateEvent(
+            @Header("Accept") String accept,
+            @Header("Content-Type") String content,
+            @Header("Authorization") String token,
+            @Body event body);
+
+    @DELETE("events/delete_event")
+    Call<eventresponse> DeleteEvent(
+            @Header("Accept") String accept,
+            @Header("Content-Type") String content,
+            @Header("Authorization") String token,
+            @Body event body);
+
 
 
 

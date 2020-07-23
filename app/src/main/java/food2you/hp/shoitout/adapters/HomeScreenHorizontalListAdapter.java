@@ -39,7 +39,7 @@ public class HomeScreenHorizontalListAdapter extends RecyclerView.Adapter<HomeSc
         }
     }
 
-    public HomeScreenHorizontalListAdapter(ArrayList<ModelHorizontalList> data,Context con) {
+    public HomeScreenHorizontalListAdapter(ArrayList<ModelHorizontalList> data, Context con) {
         this.dataSet = data;
         this.con=con;
     }

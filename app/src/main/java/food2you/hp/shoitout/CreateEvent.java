@@ -72,6 +72,8 @@ import food2you.hp.shoitout.model.event;
 import food2you.hp.shoitout.model.eventresponse;
 import food2you.hp.shoitout.service.APIService;
 import food2you.hp.shoitout.service.ApiUtils;
+import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
+import iamutkarshtiwari.github.io.ananas.editimage.ImageEditorIntentBuilder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,16 +88,16 @@ public class CreateEvent extends AppCompatActivity  {
     private Bitmap bitmap;
     private File destination = null;
     private InputStream inputStreamImg;
-    private String imgPath = null;
+
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     ImageView camera;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS= 7;
-    String token;
+    String token,imgPath;
     JSONObject obj = null;
 
 
     SpotsDialog dailog ;
-    EditText full_name,email,people,price,description;
+    EditText full_name,email,peoplimgPathe,price,description,people;
     RequestQueue queue;
     DatePicker picker;
     Button create_event;
@@ -105,6 +107,7 @@ public class CreateEvent extends AppCompatActivity  {
     private ProgressDialog progressDialog;
     private String baseUrl;
     private APIService mAPIService;
+    public static final int ACTION_REQUEST_EDITIMAGE = 9;
     CognitoCachingCredentialsProvider credentialsProvider;
 
        Retrofit.Builder   builder = new Retrofit.Builder()
@@ -167,6 +170,8 @@ public class CreateEvent extends AppCompatActivity  {
         description = (EditText) findViewById(R.id.desciption_creat_event);
         picker=(DatePicker)findViewById(R.id.datePicker1);
         create_event=(Button) findViewById(R.id.btnCreateEvent);
+
+
 
         SharedPreferences sharedPreferences = getSharedPreferences("Authtoken", MODE_PRIVATE);
 
@@ -261,6 +266,16 @@ public class CreateEvent extends AppCompatActivity  {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         inputStreamImg = null;
+
+        if(requestCode==ACTION_REQUEST_EDITIMAGE)
+        {
+            try {
+                handleEditorImage(data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
         if (requestCode == PICK_IMAGE_CAMERA) {
             try {
                 Uri selectedImage = data.getData();
@@ -286,7 +301,8 @@ public class CreateEvent extends AppCompatActivity  {
                 }
 
                 imgPath = destination.getAbsolutePath();
-                imageview.setImageBitmap(bitmap);
+                editImageClick();
+               // imageview.setImageBitmap(bitmap);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -301,7 +317,8 @@ public class CreateEvent extends AppCompatActivity  {
 
                 imgPath = getRealPathFromURI(selectedImage);
                 destination = new File(imgPath.toString());
-                imageview.setImageBitmap(bitmap);
+                editImageClick();
+             //   imageview.setImageBitmap(bitmap);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -309,6 +326,44 @@ public class CreateEvent extends AppCompatActivity  {
         }
     }
 
+
+    private void handleEditorImage(Intent data) throws IOException {
+        String newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH);
+        boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false);
+
+        if (isImageEdit) {
+         //   Toast.makeText(this, getString(R.string.save_path, newFilePath), Toast.LENGTH_LONG).show();
+        } else {
+            newFilePath = data.getStringExtra(ImageEditorIntentBuilder.SOURCE_PATH);
+
+        }
+
+    Uri uri= Uri.fromFile(new File(newFilePath));
+        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+        imageview.setImageBitmap(bitmap);
+        //  loadImage(newFilePath);
+    }
+    private void editImageClick() {
+        File outputFile = FileUtils.genEditFile();
+        try {
+            Intent intent = new ImageEditorIntentBuilder(this, imgPath, outputFile.getAbsolutePath())
+                    .withAddText()
+                    .withPaintFeature()
+                    .withFilterFeature()
+                    .withRotateFeature()
+                    .withCropFeature()
+                    .withBrightnessFeature()
+                    .withSaturationFeature()
+                    .withBeautyFeature()
+                    .forcePortrait(true)
+                    .build();
+
+            EditImageActivity.start(this, intent, ACTION_REQUEST_EDITIMAGE);
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.iamutkarshtiwari_github_io_ananas_not_selected, Toast.LENGTH_SHORT).show();
+            Log.e("Demo App", e.getMessage());
+        }
+    }
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Audio.Media.DATA};
         Cursor cursor = managedQuery(contentUri, proj, null, null, null);
@@ -433,23 +488,20 @@ public class CreateEvent extends AppCompatActivity  {
         call.enqueue(new Callback<eventresponse>() {
             @Override
             public void onResponse(Call<eventresponse> call, Response<eventresponse> response) {
-if(response.isSuccessful()){
-    Log.d("Response",response.body().getData().getFullname());
-    Log.d("Response",response.body().getData().getEventdate() );
-    Log.d("response:Des",response.body().getData().getDescription() + response.body().getData().getUserId() + response.body().getData().getEventbanner() );
-    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
+                if(response.isSuccessful()){
+                    Log.d("Response",response.body().getMsg());
+                    Toast.makeText(getApplicationContext(),"Successfull Created",Toast.LENGTH_SHORT).show();
+                    dailog.dismiss();
 
-    dailog.dismiss();
-
-}else {
-   Log.d("Response",response.body().getMsg());
-    Log.d("Response",response.body().getData().getEventdate() );
-    Log.d("response:Des",response.body().getData().getEventdate());
-    Toast.makeText(getApplicationContext(),response.body().getMsg(),Toast.LENGTH_SHORT).show();
-    dailog.dismiss();
+                }else {
+                    //  Log.d("Response",response.body().getMsg());
+                    Toast.makeText(getApplicationContext(),"not Created",Toast.LENGTH_SHORT).show();
+                    dailog.dismiss();
 
 
-}
+                }
+
+
 
             }
 

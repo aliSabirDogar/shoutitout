@@ -1,6 +1,5 @@
 package food2you.hp.shoitout.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class eventresponse {
@@ -26,15 +25,6 @@ public class eventresponse {
 
     @SerializedName("msg")
     private String msg;
-
-    public event getData() {
-        return data;
-    }
-
-    public void setData(event data) {
-        this.data = data;
-    }
-
     @SerializedName("data")
     event data;
 
