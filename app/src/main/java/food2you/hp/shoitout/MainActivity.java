@@ -4,6 +4,7 @@ package food2you.hp.shoitout;
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +48,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity implements RecyclerView.OnItemTouchListener{
 
 
     private static RecyclerView.Adapter adapter;
@@ -100,7 +104,8 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         create_event=findViewById(R.id.create_event);
-
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         SharedPreferences sharedPreferences = getSharedPreferences("Authtoken", MODE_PRIVATE);
         token = sharedPreferences.getString("token", null);
         Log.d("tokenPassed",token);
@@ -252,6 +257,71 @@ public class MainActivity extends Activity{
     }
 
 
+    @Override
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+        return false;
+    }
 
+    @Override
+    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        Intent intent = new Intent(MainActivity.this, DetailEvent.class);
+        startActivity(intent);
+        //   finish();
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+
+    private static class MyOnClickListener implements View.OnClickListener {
+
+        private final Context context;
+
+        private MyOnClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            //  removeItem(v);
+        }
+
+
+    }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case R.id.navigation_shop:
+                    // toolbar.setTitle("Shop");
+                    return true;
+                case R.id.navigation_gifts:
+                    // toolbar.setTitle("My Gifts");
+                    return true;
+                case R.id.navigation_cart:
+                    Intent intent2 = new Intent(getApplicationContext(), notificationActivity.class);
+                    startActivity(intent2);
+                    // toolbar.setTitle("Cart");
+                    return true;
+                case R.id.navigation_noti:
+
+                    Intent intent = new Intent(getApplicationContext(), Profile.class);
+                    startActivity(intent);
+                    // toolbar.setTitle("Cart");
+                    return true;
+
+            }
+            return false;
+        }
+    };
 
 }

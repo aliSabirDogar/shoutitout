@@ -445,7 +445,7 @@ public class UpdateEvent extends AppCompatActivity {
 
         Log.d("Date",String_date);
         event ebody=new event(Integer.valueOf(id),String_name, String_email, String_date,String_description,Image_AWS_URL,Integer.valueOf(String_people),Integer.valueOf(String_price));
-        Call<eventresponse> call  =      mAPIServices.CreateEvent("application/json","application/json",token,ebody);
+        Call<eventresponse> call  =      mAPIServices.UpdateEvent("application/json","application/json",token,ebody);
         call.enqueue(new Callback<eventresponse>() {
             @Override
             public void onResponse(Call<eventresponse> call, Response<eventresponse> response) {

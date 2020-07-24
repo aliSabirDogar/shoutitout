@@ -29,6 +29,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="HardcodedDebugMode">
         <activity android:name=".UpdateEvent"></activity>
+        <activity android:name=".notificationActivity"></activity>
+        <activity android:name=".Profile" />
         <activity android:name=".MapRoute" />
         <activity android:name=".CreateEvent" />
         <activity android:name=".DetailEvent" />
